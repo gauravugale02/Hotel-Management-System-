@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>अ‍ॅडमीन — हॉटेल शौर्य वाडा</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="admin-login">
+    <div class="login-card">
+      <div class="hotel-emblem" style="width: 170px; height: 170px; padding: 0.8rem; margin-bottom: 1rem;">
+        <div class="top-txt" style="font-size: 0.95rem;">हॉटेल</div>
+        <div class="mid-txt" style="font-size: 1.6rem;">
+          <span class="danda" style="font-size: 1.4rem;">॥</span>
+          <span>शौर्य वाडा</span>
+          <span class="danda" style="font-size: 1.4rem;">॥</span>
+        </div>
+        <div class="bot-txt" style="font-size: 0.75rem; width: 90%;">बेत गावाकडचा</div>
+      </div>
+      <p class="subtitle" style="text-align: center; margin-top: 0.5rem;">अ‍ॅडमीन डॅशबोर्ड</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" class="form-control" id="loginEmail" required placeholder="admin@shauryawada.com">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" class="form-control" id="loginPassword" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign In</button>
+        <p id="loginError" style="color:var(--danger);font-size:0.85rem;margin-top:0.75rem;display:none;"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="adminApp" class="admin-layout" style="display:none;">
+    <aside class="admin-sidebar">
+      <div class="logo" style="padding: 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1);">हॉटेल <span>॥ शौर्य वाडा ॥</span></div>
+      <ul class="admin-nav">
+        <li><button class="active" data-section="dashboard">📊 Dashboard</button></li>
+        <li><button data-section="menu">🍽️ Menu Management</button></li>
+        <li><button data-section="orders">📋 Live Orders</button></li>
+        <li><button data-section="tables">🪑 Tables</button></li>
+        <li><button data-section="qr">📱 QR Codes</button></li>
+        <li><button data-section="transactions">💰 Transactions</button></li>
+        <li><button id="logoutBtn" style="margin-top:2rem;color:rgba(255,255,255,0.6);">🚪 Logout</button></li>
+      </ul>
+    </aside>
+
+    <main class="admin-main">
+      <!-- Dashboard -->
+      <section id="section-dashboard" class="admin-section active">
+        <div class="admin-topbar">
+          <h2>Dashboard</h2>
+          <span id="adminEmail" style="color:var(--text-muted);font-size:0.9rem;"></span>
+        </div>
+        <div class="stats-grid" id="statsGrid">
+          <div class="stat-card">
+            <div class="stat-icon">📋</div>
+            <div class="stat-label">Orders Today</div>
+            <div class="stat-value" id="statOrders">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-label">Revenue Today</div>
+            <div class="stat-value" id="statRevenue">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-label">Pending Orders</div>
+            <div class="stat-value" id="statPending">—</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">🪑</div>
+            <div class="stat-label">Tables Occupied</div>
+            <div class="stat-value" id="statTables">—</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Menu Management -->
+      <section id="section-menu" class="admin-section">
+        <div class="admin-topbar">
+          <h2>Menu Management</h2>
+        </div>
+        <div class="admin-form" id="menuForm">
+          <h3 id="menuFormTitle">Add Menu Item</h3>
+          <input type="hidden" id="menuEditId">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Name</label>
+              <input type="text" class="form-control" id="menuName" required placeholder="Paneer Butter Masala">
+            </div>
+            <div class="form-group">
+              <label>Price (₹)</label>
+              <input type="number" class="form-control" id="menuPrice" required min="1" placeholder="320">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea class="form-control" id="menuDescription" rows="2"
+              placeholder="Soft cottage cheese in rich tomato gravy..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category</label>
+              <select class="form-control" id="menuCategory">
+                <option value="veg">Veg</option>
+                <option value="non-veg">Non-Veg</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Image (Upload file)</label>
+              <input type="file" class="form-control" id="menuImageFile" accept="image/*"
+                style="padding: 0.35rem 0.5rem;">
+              <input type="hidden" id="menuImage">
+              <span id="uploadStatus"
+                style="font-size:0.8rem; color:var(--text-muted); display:block; margin-top: 0.25rem;"></span>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-primary" id="saveMenuBtn">Save Item</button>
+            <button type="button" class="btn btn-outline" id="cancelMenuBtn" style="display:none;">Cancel</button>
+          </div>
+        </div>
+        <table class="data-table" id="menuTable">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Available</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="menuTableBody"></tbody>
+        </table>
+      </section>
+
+      <!-- Live Orders -->
+      <section id="section-orders" class="admin-section">
+        <div class="admin-topbar">
+          <h2>Live Orders</h2>
+        </div>
+        <div class="filter-bar">
+          <select id="orderStatusFilter">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="accepted">Accepted</option>
+            <option value="preparing">Preparing</option>
+            <option value="ready">Ready</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Table</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Payment</th>
+              <th>Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ordersTableBody"></tbody>
+        </table>
+      </section>
+
+      <!-- Tables -->
+      <section id="section-tables" class="admin-section">
+        <div class="admin-topbar">
+          <h2>Table Management</h2>
+        </div>
+        <div class="admin-form">
+          <h3>Add Table</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Table Number</label>
+              <input type="number" class="form-control" id="tableNumber" min="1" placeholder="1">
+            </div>
+            <div class="form-group">
+              <label>Capacity</label>
+              <input type="number" class="form-control" id="tableCapacity" min="1" value="4">
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" id="addTableBtn">Add Table</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Capacity</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tablesTableBody"></tbody>
+        </table>
+      </section>
+
+      <!-- QR Codes -->
+      <section id="section-qr" class="admin-section">
+        <div class="admin-topbar">
+          <h2>QR Code Generator</h2>
+        </div>
+        <div class="qr-section">
+          <div>
+            <div class="form-group">
+              <label>Select Table</label>
+              <select class="form-control" id="qrTableSelect">
+                <option value="">— Select a table —</option>
+              </select>
+            </div>
+            <p style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">
+              Customers scan this QR to open the menu for their table. QR opens <strong>menu.html?table=N</strong>
+              (auto-detects table).
+            </p>
+            <p style="color:var(--warning);font-size:0.8rem;margin-top:0.5rem;">
+              For phone testing: set <code>APP_BASE_URL</code> in <code>js/firebase-config.js</code> to your PC IP, e.g.
+              <code>http://192.168.1.5:3000</code>
+            </p>
+          </div>
+          <div class="qr-preview" id="qrPreview">
+            <p style="color:var(--text-muted);">Select a table to generate QR code</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Transactions -->
+      <section id="section-transactions" class="admin-section">
+        <div class="admin-topbar">
+          <h2>Transaction History</h2>
+        </div>
+        <div class="filter-bar">
+          <input type="date" class="form-control" id="txnStartDate" style="width:auto;">
+          <span>to</span>
+          <input type="date" class="form-control" id="txnEndDate" style="width:auto;">
+          <button class="btn btn-primary btn-sm" id="filterTxnBtn">Filter</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Table</th>
+              <th>Items</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Processed By</th>
+            </tr>
+          </thead>
+          <tbody id="txnTableBody"></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/table.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+
+</html>

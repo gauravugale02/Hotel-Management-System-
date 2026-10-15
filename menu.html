@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>मेन्यू — हॉटेल शौर्य वाडा</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // Detect table from QR before anything else loads (?table=3 or #table=3)
+    (function () {
+      var s = location.search, h = location.hash, p = location.pathname, t = null;
+      var m = s.match(/[?&]table=(\d+)/i);
+      if (m) t = m[1];
+      if (!t) { m = h.match(/table=(\d+)/i); if (m) t = m[1]; }
+      if (!t) { m = h.match(/^#t(\d+)$/i); if (m) t = m[1]; }
+      if (!t) { m = p.match(/\/table\/(\d+)/i); if (m) t = m[1]; }
+      if (t) {
+        try { sessionStorage.setItem('tableNumber', t); } catch (e) { }
+        window.__TABLE_NUMBER__ = t;
+      }
+    })();
+  </script>
+  <script src="js/table.js"></script>
+  <script>captureTableFromUrl();</script>
+</head>
+
+<body>
+  <div id="menuApp">
+    <header class="page-header">
+      <div class="container">
+        <a href="index.html" class="logo" id="homeLink">हॉटेल <span>॥ शौर्य वाडा ॥</span></a>
+        <div class="table-badge" id="tableBadge">Table —</div>
+      </div>
+    </header>
+
+    <main class="menu-page">
+      <div class="container">
+        <h2 style="margin-bottom:0.5rem;">Our Menu</h2>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem;">Select your favorites and add to cart</p>
+
+        <div class="category-tabs">
+          <button class="tab-btn active" data-category="all">All</button>
+          <button class="tab-btn" data-category="veg">Veg</button>
+          <button class="tab-btn" data-category="non-veg">Non-Veg</button>
+        </div>
+
+        <div id="menuGrid" class="menu-grid">
+          <div class="loading">
+            <div class="spinner"></div>Loading menu...
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Floating Cart Bar -->
+    <div class="cart-bar" id="cartBar">
+      <div class="container">
+        <div class="cart-info">
+          <div class="cart-count" id="cartCount">0</div>
+          <div>
+            <div style="font-size:0.85rem;opacity:0.85;">Your Cart</div>
+            <div class="cart-total" id="cartTotal">₹0</div>
+          </div>
+        </div>
+        <button class="btn btn-accent" id="viewCartBtn">View Cart</button>
+      </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="cartModal">
+      <div class="modal">
+        <div class="modal-header">
+          <h2>Your Order</h2>
+          <button class="modal-close" id="closeCart">&times;</button>
+        </div>
+        <div class="modal-body" id="cartItems"></div>
+        <div class="modal-footer">
+          <div class="cart-grand-total">
+            <span>Total</span>
+            <span id="cartGrandTotal">₹0</span>
+          </div>
+          <div class="form-group">
+            <label for="specialInstructions">Special Instructions (optional)</label>
+            <textarea class="form-control" id="specialInstructions" rows="2"
+              placeholder="Less spicy, no onion, etc."></textarea>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" id="placeOrderBtn">Place Order</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- #menuApp -->
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/menu.js"></script>
+</body>
+
+</html>

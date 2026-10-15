@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>हॉटेल शौर्य वाडा — बेत गावाकडचा</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    (function () {
+      var s = location.search, h = location.hash, t = null;
+      var m = s.match(/[?&]table=(\d+)/i);
+      if (m) t = m[1];
+      if (!t) { m = h.match(/table=(\d+)/i); if (m) t = m[1]; }
+      if (t) {
+        try { sessionStorage.setItem('tableNumber', t); } catch (e) {}
+        location.replace('menu.html?table=' + t + '#table=' + t);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <header class="page-header">
+    <div class="container">
+      <div class="logo">हॉटेल <span>॥ शौर्य वाडा ॥</span></div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hotel-emblem">
+        <div class="top-txt">हॉटेल</div>
+        <div class="mid-txt">
+          <span class="danda">॥</span>
+          <span>शौर्य वाडा</span>
+          <span class="danda">॥</span>
+        </div>
+        <div class="bot-txt">बेत गावाकडचा</div>
+      </div>
+      <h1 style="font-size: 1.8rem; margin-top: 1rem;">आपले स्वागत आहे!</h1>
+      <div class="hero-divider"></div>
+      <p class="subtitle" style="font-family: var(--font-heading); color: var(--accent); font-size: 1.3rem;">बेत गावाकडचा</p>
+      <p>आपल्या टेबलवरील QR कोड स्कॅन करा, मेन्यू पहा आणि तुमची ऑर्डर नोंदवा.</p>
+      <p style="color:var(--text-muted);font-size:0.85rem;margin-top:1rem;">
+        Staff: open <a href="admin.html">Admin Dashboard</a>
+      </p>
+    </div>
+  </section>
+</body>
+</html>

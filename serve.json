@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/table/:id", "destination": "/menu.html?table=:id" }
+  ],
+  "redirects": [
+    { "source": "/table/:id/", "destination": "/menu.html?table=:id", "type": 302 }
+  ]
+}

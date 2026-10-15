@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>स्वयंपाकघर डिस्प्ले — हॉटेल शौर्य वाडा</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <main class="kitchen-page">
+    <div class="kitchen-header">
+      <div>
+        <h1>🍗 Kitchen Display</h1>
+        <p style="color:var(--text-muted);font-size:0.9rem;">हॉटेल ॥ शौर्य वाडा ॥ </p>
+      </div>
+      <div class="kitchen-clock" id="clock">--:--</div>
+    </div>
+
+    <div id="kitchenGrid" class="kitchen-grid">
+      <div class="loading">
+        <div class="spinner"></div>Connecting to kitchen orders...
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/kitchen.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ऑर्डर निश्चित झाली — हॉटेल शौर्य वाडा</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="page-header">
+    <div class="container">
+      <div class="logo">हॉटेल <span>॥ शौर्य वाडा ॥</span></div>
+      <div class="table-badge" id="tableBadge">Table —</div>
+    </div>
+  </header>
+
+  <main class="confirm-page">
+    <div class="container">
+      <div class="confirm-card card">
+        <div class="card-body">
+          <div class="confirm-icon">✓</div>
+          <h2>Order Placed!</h2>
+          <p style="color:var(--text-muted);margin-top:0.5rem;">Your order has been sent to the kitchen</p>
+
+          <div class="order-summary" id="orderSummary">
+            <h3>Order Summary</h3>
+            <div id="summaryItems"></div>
+            <div class="summary-total">
+              <span>Total</span>
+              <span id="summaryTotal">₹0</span>
+            </div>
+          </div>
+
+          <div class="status-tracker">
+            <h3 style="margin-bottom:1.5rem;text-align:center;">Order Status</h3>
+            <div class="status-steps">
+              <div class="status-step" data-status="pending">
+                <div class="step-circle">1</div>
+                <span class="step-label">Pending</span>
+              </div>
+              <div class="status-step" data-status="accepted">
+                <div class="step-circle">2</div>
+                <span class="step-label">Accepted</span>
+              </div>
+              <div class="status-step" data-status="preparing">
+                <div class="step-circle">3</div>
+                <span class="step-label">Preparing</span>
+              </div>
+              <div class="status-step" data-status="ready">
+                <div class="step-circle">4</div>
+                <span class="step-label">Ready</span>
+              </div>
+              <div class="status-step" data-status="completed">
+                <div class="step-circle">5</div>
+                <span class="step-label">Completed</span>
+              </div>
+            </div>
+            <p class="status-message" id="statusMessage">Waiting for kitchen to accept your order...</p>
+          </div>
+
+          <a href="menu.html" class="btn btn-outline" id="orderMoreBtn" style="margin-top:1rem;">Order More</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/table.js"></script>
+  <script src="js/db.js"></script>
+  <script>
+    const STATUS_MESSAGES = {
+      pending: 'Waiting for kitchen to accept your order...',
+      accepted: 'Your order has been accepted!',
+      preparing: 'Chef is preparing your delicious meal...',
+      ready: 'Your order is ready! Enjoy your meal 🎉',
+      completed: 'Order completed. Thank you for dining with us!'
+    };
+
+    const STATUS_ORDER = ['pending', 'accepted', 'preparing', 'ready', 'completed'];
+
+    (async function () {
+      const orderId = sessionStorage.getItem('lastOrderId');
+
+      if (!orderId) {
+        updateTableBadge('tableBadge');
+        document.getElementById('statusMessage').textContent = 'No active order found.';
+        return;
+      }
+
+      function syncTableFromOrder(order) {
+        if (order?.tableNumber) {
+          setTableNumber(String(order.tableNumber));
+          updateTableBadge('tableBadge');
+          document.getElementById('orderMoreBtn').href = getTableMenuUrl(order.tableNumber);
+        }
+      }
+
+      const order = await getOrder(orderId);
+      if (order) {
+        syncTableFromOrder(order);
+        renderSummary(order);
+      }
+
+      listenToOrder(orderId, (order) => {
+        syncTableFromOrder(order);
+        renderSummary(order);
+        updateStatusTracker(order.status);
+      });
+    })();
+
+    function renderSummary(order) {
+      const itemsEl = document.getElementById('summaryItems');
+      itemsEl.innerHTML = order.items.map(item => `
+        <div class="summary-item">
+          <span>${item.name} × ${item.qty}</span>
+          <span>${formatCurrency(item.price * item.qty)}</span>
+        </div>
+      `).join('');
+      document.getElementById('summaryTotal').textContent = formatCurrency(order.total);
+
+      if (order.specialInstructions) {
+        itemsEl.innerHTML += `<p style="margin-top:0.75rem;font-size:0.85rem;color:var(--text-muted);"><em>Note: ${order.specialInstructions}</em></p>`;
+      }
+    }
+
+    function updateStatusTracker(status) {
+      const currentIdx = STATUS_ORDER.indexOf(status);
+      document.querySelectorAll('.status-step').forEach(step => {
+        const stepStatus = step.dataset.status;
+        const stepIdx = STATUS_ORDER.indexOf(stepStatus);
+        step.classList.remove('active', 'done');
+        if (stepIdx < currentIdx) step.classList.add('done');
+        else if (stepIdx === currentIdx) step.classList.add('active');
+      });
+      document.getElementById('statusMessage').textContent = STATUS_MESSAGES[status] || status;
+    }
+  </script>
+</body>
+</html>
